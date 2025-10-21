@@ -1,0 +1,20 @@
+{
+  "name": "mision-parabolica",
+  "version": "1.0.0",
+  "description": "Aplicación web para talleres educativos de parábolas",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd web && npm install && npm run build && cp -r dist ../api/",
+    "build:backend": "cd api && npm install",
+    "start": "cd api && npm start",
+    "dev": "concurrently \"cd api && npm run dev\" \"cd web && npm run dev\"",
+    "install:all": "cd api && npm install && cd ../web && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

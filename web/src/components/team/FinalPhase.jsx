@@ -99,19 +99,10 @@ export default function FinalPhase({ teamId, teamProgress }) {
           marginBottom: '16px',
           border: '2px solid #ffc107'
         }}>
-          <h4 style={{ margin: '0 0 12px 0', color: '#856404', fontSize: '18px' }}>🎯 Objetivo: Con las 3 pistas obtenidas, cada equipo debe formar la ecuación final:</h4>
-          <div style={{ 
-            background: '#dc3545', 
-            color: 'white', 
-            padding: '12px', 
-            borderRadius: '6px', 
-            textAlign: 'center',
-            fontSize: '20px',
-            fontWeight: 'bold',
-            margin: '12px 0'
-          }}>
-            x² - 4x + 4 = 0
-          </div>
+          <h4 style={{ margin: '0 0 12px 0', color: '#856404', fontSize: '18px' }}>🎯 Objetivo Final:</h4>
+          <p style={{ margin: '0', color: '#856404', fontSize: '16px' }}>
+            Con las pistas obtenidas de las misiones anteriores, cada equipo debe deducir y formar la ecuación final que resuelve el misterio.
+          </p>
         </div>
 
         {/* Mostrar pistas solo si se completaron las misiones correspondientes */}

@@ -1,5 +1,7 @@
 import { io } from 'socket.io-client'
-const API = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+
+// En producción, usar la misma URL del servicio
+const API = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:4000')
 
 export const state = {
   api: API,
