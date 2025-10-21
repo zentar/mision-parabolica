@@ -4,7 +4,7 @@ import { state, subscribe } from './state/store';
 import SessionForm from './components/common/SessionForm';
 import TeacherView from './components/teacher/TeacherView';
 import TeamView from './components/team/TeamView';
-import { NotificationContainer } from './components/common/Notification';
+import { NotificationProvider } from './components/common/Notification';
 import { useNotification } from './hooks/useNotification';
 
 // Global styles
@@ -128,7 +128,7 @@ export default function App() {
           )}
         </MainContent>
 
-        <NotificationContainer>
+        <NotificationProvider>
           {notifications.map(notification => (
             <Notification
               key={notification.id}
@@ -136,7 +136,7 @@ export default function App() {
               onClose={() => removeNotification(notification.id)}
             />
           ))}
-        </NotificationContainer>
+        </NotificationProvider>
       </AppContainer>
     </>
   );

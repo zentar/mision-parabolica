@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import GeneralTimer from '../common/GeneralTimer';
 import MissionBox from './MissionBox';
+import Mission2Box from './Mission2Box';
+import Mission3Box from './Mission3Box';
 import FinalPhase from './FinalPhase';
 import FinalSummary from './FinalSummary';
 
@@ -167,18 +169,27 @@ export default function TeamView({ session, team }) {
   const [showUnlockNotification, setShowUnlockNotification] = useState(null);
   
   // Determinar qué misiones están disponibles
-  const isMission1Available = true;
-  const isMission2Available = progress.m1.isCorrect;
-  const isMission3Available = progress.m2.isCorrect;
-  const isFinalAvailable = progress.m3.isCorrect;
+  const isMission1Available = session.currentMission === 'm1' || session.currentMission === 'm2' || session.currentMission === 'm3' || session.currentMission === 'final';
+  const isMission2Available = session.currentMission === 'm2' || session.currentMission === 'm3' || session.currentMission === 'final';
+  const isMission3Available = session.currentMission === 'm3' || session.currentMission === 'final';
+  const isFinalAvailable = session.currentMission === 'final';
+
+  // Debug logs
+  console.log('🔍 TeamView Debug:', {
+    currentMission: session.currentMission,
+    isMission1Available,
+    isMission2Available,
+    isMission3Available,
+    isFinalAvailable
+  });
 
   // Detectar cuando se desbloquea una nueva misión
   useEffect(() => {
     const newUnlocked = {
-      m1: true,
-      m2: progress.m1.isCorrect,
-      m3: progress.m2.isCorrect,
-      final: progress.m3.isCorrect
+      m1: session.currentMission === 'm1' || session.currentMission === 'm2' || session.currentMission === 'm3' || session.currentMission === 'final',
+      m2: session.currentMission === 'm2' || session.currentMission === 'm3' || session.currentMission === 'final',
+      m3: session.currentMission === 'm3' || session.currentMission === 'final',
+      final: session.currentMission === 'final'
     };
 
     // Detectar cambios en el desbloqueo
@@ -312,14 +323,15 @@ export default function TeamView({ session, team }) {
       )}
 
       <MissionsContainer>
+        
         {/* Mostrar solo la misión actual según session.currentMission */}
         {session.currentMission === 'm1' && (
           <MissionWrapper>
-            <MissionBox 
-              title="Misión 1: Análisis Básico" 
+            <Mission3Box 
+              title="Misión 1: Detectives de la Parábola" 
               missionKey="m1"
               teamId={team.id}
-              description="Encuentra el vértice, raíces y propiedades de la parábola"
+              description="Analiza la parábola f(x) = -x² + 4x - 3. Determina los puntos clave de su gráfica y comportamiento."
               status={getMissionStatus('m1')}
             />
           </MissionWrapper>
@@ -327,11 +339,11 @@ export default function TeamView({ session, team }) {
         
         {session.currentMission === 'm2' && (
           <MissionWrapper>
-            <MissionBox 
-              title="Misión 2: Formas de la Parábola" 
+            <Mission2Box 
+              title="Misión 2: Detectores de Forma" 
               missionKey="m2"
               teamId={team.id}
-              description="Analiza la forma factorizada y canónica"
+              description="Estudia la parábola f(x) = x² - 6x + 8. Determina su forma factorizada y forma canónica (vértice)."
               status={getMissionStatus('m2')}
             />
           </MissionWrapper>
@@ -339,11 +351,11 @@ export default function TeamView({ session, team }) {
         
         {session.currentMission === 'm3' && (
           <MissionWrapper>
-            <MissionBox 
-              title="Misión 3: Propiedades Avanzadas" 
+            <Mission3Box 
+              title="Misión 3: Grafiquen la Salvación" 
               missionKey="m3"
               teamId={team.id}
-              description="Determina el rango y concavidad"
+              description="Analiza la parábola f(x) = 2x² - 8x + 6. Determina los puntos clave de su gráfica y comportamiento."
               status={getMissionStatus('m3')}
             />
           </MissionWrapper>
@@ -351,7 +363,7 @@ export default function TeamView({ session, team }) {
         
         {session.currentMission === 'final' && (
           <MissionWrapper>
-            <FinalPhase teamId={team.id} />
+            <FinalPhase teamId={team.id} teamProgress={team.progress} />
           </MissionWrapper>
         )}
       </MissionsContainer>

@@ -117,16 +117,21 @@ export function approximatelyEqual(a, b, epsilon = 1e-6) {
  */
 export function normalizeExpression(expr) {
   try {
-    // Parse and simplify the expression
-    const node = math.parse(expr);
+    // Normalize the expression string first
+    let normalized = expr
+      .replace(/\s+/g, '') // Remove all spaces
+      .replace(/\*/g, '') // Remove multiplication signs
+      .toLowerCase(); // Convert to lowercase
+    
+    // Try to parse and simplify
+    const node = math.parse(normalized);
     const simplified = math.simplify(node);
     return simplified.toString();
   } catch (error) {
     // Fallback to string normalization
     return expr
       .replace(/\s+/g, '')
-      .replace(/\*+/g, '')
-      .replace(/\^2/g, '²')
+      .replace(/\*/g, '')
       .toLowerCase();
   }
 }
@@ -187,6 +192,65 @@ export function getRootNature(a, b, c) {
     return 'one_real_double';
   } else {
     return 'no_real_roots';
+  }
+}
+
+/**
+ * Get the factored form of a quadratic function
+ */
+export function getFactoredForm(a, b, c) {
+  const roots = getRoots(a, b, c);
+  
+  if (roots.length === 0) {
+    // No real roots, return the original form
+    return `${a}x^2+${b}x+${c}`;
+  } else if (roots.length === 1) {
+    // One double root
+    const root = roots[0];
+    return `(x-${root})^2`;
+  } else {
+    // Two distinct roots
+    const [r1, r2] = roots.sort((x, y) => x - y);
+    return `(x-${r1})(x-${r2})`;
+  }
+}
+
+/**
+ * Get the canonical form (vertex form) of a quadratic function
+ */
+export function getCanonicalForm(a, b, c) {
+  const vertex = getVertex(a, b, c);
+  const h = vertex.x;
+  const k = vertex.y;
+  
+  return `(x-${h})^2+${k}`;
+}
+
+/**
+ * Check if two expressions are mathematically equivalent
+ */
+export function areEquivalentExpressions(expr1, expr2) {
+  try {
+    // Normalize both expressions
+    const norm1 = expr1.replace(/\s+/g, '').toLowerCase();
+    const norm2 = expr2.replace(/\s+/g, '').toLowerCase();
+    
+    // Direct string comparison first
+    if (norm1 === norm2) return true;
+    
+    // Try to parse and compare mathematically
+    const node1 = math.parse(norm1);
+    const node2 = math.parse(norm2);
+    
+    // Simplify both expressions
+    const simplified1 = math.simplify(node1);
+    const simplified2 = math.simplify(node2);
+    
+    // Compare the simplified forms
+    return simplified1.toString() === simplified2.toString();
+  } catch (error) {
+    // If parsing fails, fall back to string comparison
+    return expr1.replace(/\s+/g, '').toLowerCase() === expr2.replace(/\s+/g, '').toLowerCase();
   }
 }
 

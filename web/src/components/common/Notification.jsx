@@ -1,3 +1,4 @@
+import React, { createContext, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const slideIn = keyframes`
@@ -126,12 +127,49 @@ export default function Notification({
   );
 }
 
-export function NotificationContainer({ children }) {
+// Contexto de notificaciones
+const NotificationContext = createContext();
+
+export function NotificationProvider({ children }) {
+  const [notifications, setNotifications] = React.useState([]);
+
+  const showNotification = React.useCallback((message, type = 'info', duration = 3000) => {
+    const id = Date.now();
+    const notification = { id, message, type, duration };
+    
+    setNotifications(prev => [...prev, notification]);
+    
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }, duration);
+  }, []);
+
+  const hideNotification = React.useCallback((id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  }, []);
+
   return (
-    <NotificationContainer>
+    <NotificationContext.Provider value={{ showNotification, hideNotification }}>
+      <NotificationContainer>
+        {notifications.map(notification => (
+          <Notification
+            key={notification.id}
+            {...notification}
+            onClose={() => hideNotification(notification.id)}
+          />
+        ))}
+      </NotificationContainer>
       {children}
-    </NotificationContainer>
+    </NotificationContext.Provider>
   );
+}
+
+export function useNotification() {
+  const context = useContext(NotificationContext);
+  if (!context) {
+    throw new Error('useNotification must be used within a NotificationProvider');
+  }
+  return context;
 }
 
 

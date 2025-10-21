@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { getSession, joinTeam, getTeam, updateTeam } from '../store.js';
+import { getSession, joinTeam, getTeam, updateTeam, onMissionCompleted } from '../store.js';
 import { validateMission, validateFinal } from '../validators.js';
 
 export default async function teamsRoutes(app) {
@@ -32,6 +32,8 @@ export default async function teamsRoutes(app) {
     if (result.ok) {
       team.progress[missionKey].isCorrect = true;
       team.score = computeScore(session, team);
+      // Avanzar a la siguiente misión si es la misión actual
+      onMissionCompleted(teamId, missionKey);
     }
     updateTeam(team);
     reply.send({ ok: result.ok, details: result.details, score: team.score });
@@ -61,6 +63,10 @@ export default async function teamsRoutes(app) {
       timeSec: team.progress.final.timeSec
     };
     team.score = computeScore(session, team);
+    if (result.ok) {
+      // Avanzar a la siguiente misión si es la fase final
+      onMissionCompleted(teamId, 'final');
+    }
     updateTeam(team);
     reply.send({ ok: result.ok, eqOk: result.eqOk, justificationOk: result.justificationOk, score: team.score });
   });

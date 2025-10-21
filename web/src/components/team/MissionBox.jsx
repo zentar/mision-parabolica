@@ -3,7 +3,29 @@ import styled from 'styled-components';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import Input from '../common/Input';
-import { submitMission, askHint } from '../../state/store';
+import { submitMission } from '../../state/store';
+
+// Helper function to parse infinity values
+const parseInfinityValue = (value) => {
+  if (value === '-∞' || value === '-inf' || value === '-infinito') {
+    return -Infinity;
+  } else if (value === '∞' || value === 'inf' || value === 'infinito') {
+    return Infinity;
+  } else if (value === '' || value === null || value === undefined) {
+    return null;
+  } else {
+    // Try to parse as number, but keep original value if it fails
+    const num = Number(value);
+    return isNaN(num) ? value : num;
+  }
+};
+
+// Helper function to format infinity values for display
+const formatInfinityValue = (value) => {
+  if (value === -Infinity) return '-∞';
+  if (value === Infinity) return '∞';
+  return value || '';
+};
 
 const MissionContainer = styled.div`
   display: flex;
@@ -106,14 +128,21 @@ export default function MissionBox({
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isRequestingHint, setIsRequestingHint] = useState(false);
   const [lastResult, setLastResult] = useState(null);
-  const [hintCount, setHintCount] = useState(0);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      const result = await submitMission(teamId, missionKey, formData);
+      // Convertir los valores de texto a los valores apropiados antes de enviar
+      const processedData = {
+        ...formData,
+        range: [
+          parseInfinityValue(formData.range[0]),
+          parseInfinityValue(formData.range[1])
+        ]
+      };
+      
+      const result = await submitMission(teamId, missionKey, processedData);
       setLastResult(result);
       onSubmit?.(result);
       
@@ -129,17 +158,6 @@ export default function MissionBox({
     }
   };
 
-  const handleHint = async () => {
-    setIsRequestingHint(true);
-    try {
-      const result = await askHint(teamId, missionKey);
-      onHint?.(result);
-    } catch (error) {
-      console.error('Error requesting hint:', error);
-    } finally {
-      setIsRequestingHint(false);
-    }
-  };
 
   const updateFormData = (field, value) => {
     setFormData(prev => ({
@@ -185,6 +203,7 @@ export default function MissionBox({
             )}
           </>
         )}
+
         
         <FormGrid>
           <Input
@@ -264,31 +283,85 @@ export default function MissionBox({
             disabled={status === 'time_expired'}
           />
           
-          <Input
-            label="Rango Inferior"
-            type="number"
-            step="any"
-            value={formData.range[0] || ''}
-            onChange={(e) => {
-              const newRange = [...formData.range];
-              newRange[0] = e.target.value === '' ? null : Number(e.target.value);
-              updateFormData('range', newRange);
-            }}
-            disabled={status === 'time_expired'}
-          />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <label style={{ fontWeight: '500', color: '#495057', fontSize: '14px' }}>
+              Rango Inferior
+            </label>
+            <input
+              type="text"
+              value={formData.range[0] || ''}
+              onChange={(e) => {
+                const newRange = [...formData.range];
+                newRange[0] = e.target.value;
+                updateFormData('range', newRange);
+              }}
+              placeholder="Ej: -∞, -inf, -infinito, o un número"
+              disabled={status === 'time_expired'}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                border: '2px solid #e9ecef',
+                borderRadius: '6px',
+                fontSize: '14px',
+                transition: 'border-color 0.2s ease',
+                fontFamily: 'inherit',
+                backgroundColor: status === 'time_expired' ? '#f8f9fa' : 'white'
+              }}
+              onFocus={(e) => {
+                if (status !== 'time_expired') {
+                  e.target.style.borderColor = '#007bff';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                }
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e9ecef';
+                e.target.style.boxShadow = 'none';
+              }}
+            />
+            <small style={{ color: '#6c757d', fontSize: '12px' }}>
+              Usa -∞, -inf, -infinito para infinito negativo
+            </small>
+          </div>
           
-          <Input
-            label="Rango Superior"
-            type="number"
-            step="any"
-            value={formData.range[1] || ''}
-            onChange={(e) => {
-              const newRange = [...formData.range];
-              newRange[1] = e.target.value === '' ? null : Number(e.target.value);
-              updateFormData('range', newRange);
-            }}
-            disabled={status === 'time_expired'}
-          />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <label style={{ fontWeight: '500', color: '#495057', fontSize: '14px' }}>
+              Rango Superior
+            </label>
+            <input
+              type="text"
+              value={formData.range[1] || ''}
+              onChange={(e) => {
+                const newRange = [...formData.range];
+                newRange[1] = e.target.value;
+                updateFormData('range', newRange);
+              }}
+              placeholder="Ej: ∞, inf, infinito, o un número"
+              disabled={status === 'time_expired'}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                border: '2px solid #e9ecef',
+                borderRadius: '6px',
+                fontSize: '14px',
+                transition: 'border-color 0.2s ease',
+                fontFamily: 'inherit',
+                backgroundColor: status === 'time_expired' ? '#f8f9fa' : 'white'
+              }}
+              onFocus={(e) => {
+                if (status !== 'time_expired') {
+                  e.target.style.borderColor = '#007bff';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                }
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e9ecef';
+                e.target.style.boxShadow = 'none';
+              }}
+            />
+            <small style={{ color: '#6c757d', fontSize: '12px' }}>
+              Usa ∞, inf, infinito para infinito positivo
+            </small>
+          </div>
         </FormGrid>
         
         <ButtonGroup>
@@ -298,13 +371,6 @@ export default function MissionBox({
           >
             {isSubmitting ? 'Enviando...' : 'Enviar Respuesta'}
           </Button>
-          
-          <HintButton 
-            onClick={handleHint}
-            disabled={isRequestingHint || status === 'time_expired'}
-          >
-            {isRequestingHint ? 'Solicitando...' : '💡 Pedir Pista'}
-          </HintButton>
         </ButtonGroup>
       </MissionContainer>
     </Card>

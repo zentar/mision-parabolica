@@ -20,6 +20,12 @@ export function connectSocket(code) {
       const res = await fetch(`${API}/sessions/${code}/state`);
       if (res.ok) {
         const sessionData = await res.json();
+        console.log('📡 Polling session:', {
+          currentMission: sessionData.currentMission,
+          totalTimeRemaining: sessionData.totalTimeRemaining,
+          status: sessionData.status
+        });
+        
         if (JSON.stringify(sessionData) !== JSON.stringify(state.session)) {
           console.log('🔄 Session updated:', sessionData);
           console.log('🎯 Current mission:', sessionData.currentMission);
@@ -27,6 +33,8 @@ export function connectSocket(code) {
           state.session = sessionData;
           render();
         }
+      } else {
+        console.log('❌ Session polling failed:', res.status, res.statusText);
       }
     } catch (error) {
       console.error('Error polling session:', error);

@@ -4,7 +4,7 @@ import { state, subscribe } from './state/store';
 import SessionForm from './components/common/SessionForm';
 import TeacherView from './components/teacher/TeacherView';
 import TeamView from './components/team/TeamView';
-import { NotificationContainer, useNotification } from './components/common/Notification';
+import { NotificationProvider, useNotification } from './components/common/Notification';
 
 // Global styles
 const GlobalStyle = createGlobalStyle`
@@ -68,9 +68,10 @@ function useStore() {
   return state;
 }
 
-export default function App() {
+function AppContent() {
   const s = useStore();
   const { showNotification } = useNotification();
+
 
   const handleSessionCreated = (result) => {
     showNotification('Sesión creada exitosamente', 'success');
@@ -99,8 +100,14 @@ export default function App() {
         {s.session && s.role === 'teacher' && <TeacherView session={s.session} />}
         {s.session && s.role === 'team' && <TeamView session={s.session} team={s.team} />}
       </MainContent>
-      
-      <NotificationContainer />
     </AppContainer>
+  );
+}
+
+export default function App() {
+  return (
+    <NotificationProvider>
+      <AppContent />
+    </NotificationProvider>
   );
 }

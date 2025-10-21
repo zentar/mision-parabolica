@@ -7,13 +7,65 @@ import {
   getAxisOfSymmetry, 
   getRange,
   approximatelyEqual,
-  normalizeExpression
+  normalizeExpression,
+  getFactoredForm,
+  getCanonicalForm,
+  areEquivalentExpressions
 } from './math-utils.js';
 
 export function validateMission(funcStr, payload) {
   const { a, b, c } = parseQuadratic(funcStr);
 
   const results = {};
+
+  // Manejar campos específicos de la Misión 2
+  if ('factoredForm' in payload) {
+    const userForm = payload.factoredForm;
+    
+    // Para f(x) = x² - 6x + 8, la forma factorizada correcta es (x-2)(x-4)
+    const correctFactored = '(x-2)(x-4)';
+    
+    // Debug logging
+    console.log('🔍 Validating factored form:');
+    console.log('  Expected:', correctFactored);
+    console.log('  User input:', userForm);
+    
+    // Comparación simple
+    const normalizedUser = userForm.replace(/\s+/g, '').toLowerCase();
+    const normalizedExpected = correctFactored.replace(/\s+/g, '').toLowerCase();
+    
+    console.log('  Normalized user:', normalizedUser);
+    console.log('  Normalized expected:', normalizedExpected);
+    
+    const ok = normalizedUser === normalizedExpected;
+    console.log('  Result:', ok);
+    
+    results.factoredForm = { ok, expected: correctFactored, user: userForm };
+  }
+
+  if ('canonicalForm' in payload) {
+    const userForm = payload.canonicalForm;
+    
+    // Para f(x) = x² - 6x + 8, la forma canónica correcta es (x-3)²-1
+    const correctCanonical = '(x-3)^2-1';
+    
+    // Debug logging
+    console.log('🔍 Validating canonical form:');
+    console.log('  Expected:', correctCanonical);
+    console.log('  User input:', userForm);
+    
+    // Comparación simple
+    const normalizedUser = userForm.replace(/\s+/g, '').toLowerCase();
+    const normalizedExpected = correctCanonical.replace(/\s+/g, '').toLowerCase();
+    
+    console.log('  Normalized user:', normalizedUser);
+    console.log('  Normalized expected:', normalizedExpected);
+    
+    const ok = normalizedUser === normalizedExpected;
+    console.log('  Result:', ok);
+    
+    results.canonicalForm = { ok, expected: correctCanonical, user: userForm };
+  }
 
   if ('vertex' in payload) {
     const expectedVertex = getVertex(a, b, c);
@@ -64,13 +116,63 @@ export function validateMission(funcStr, payload) {
     const [userLo, userHi] = payload.range;
     let ok = false;
     
+    // Helper function to parse infinity values
+    const parseInfinityValue = (value) => {
+      if (value === '-∞' || value === '-inf' || value === '-infinito') {
+        return -Infinity;
+      } else if (value === '∞' || value === 'inf' || value === 'infinito') {
+        return Infinity;
+      } else if (value === '' || value === null || value === undefined) {
+        return null;
+      } else {
+        const num = Number(value);
+        return isNaN(num) ? value : num;
+      }
+    };
+    
+    const parsedUserLo = parseInfinityValue(userLo);
+    const parsedUserHi = parseInfinityValue(userHi);
+    
     if (a > 0) {
-      ok = approximatelyEqual(userLo, expectedRange[0]) && userHi === null;
+      // Parábola que abre hacia arriba: rango [vértice.y, ∞)
+      const expectedLo = expectedRange[0];
+      const expectedHi = expectedRange[1];
+      
+      // Verificar límite inferior (debe ser el vértice)
+      const loOk = approximatelyEqual(parsedUserLo, expectedLo);
+      
+      // Verificar límite superior (debe ser infinito o null)
+      const hiOk = parsedUserHi === Infinity || parsedUserHi === null || parsedUserHi === undefined;
+      
+      ok = loOk && hiOk;
     } else {
-      ok = userLo === null && approximatelyEqual(userHi, expectedRange[1]);
+      // Parábola que abre hacia abajo: rango (-∞, vértice.y]
+      const expectedLo = expectedRange[0];
+      const expectedHi = expectedRange[1];
+      
+      // Verificar límite inferior (debe ser infinito negativo o null)
+      const loOk = parsedUserLo === -Infinity || parsedUserLo === null || parsedUserLo === undefined;
+      
+      // Verificar límite superior (debe ser el vértice)
+      const hiOk = approximatelyEqual(parsedUserHi, expectedHi);
+      
+      ok = loOk && hiOk;
     }
     
     results.range = { ok, expected: expectedRange };
+  }
+
+  // Validar campos específicos de la Misión 3
+  if ('axisOfSymmetry' in payload) {
+    const expectedAxis = getAxisOfSymmetry(a, b);
+    const ok = approximatelyEqual(payload.axisOfSymmetry, expectedAxis);
+    results.axisOfSymmetry = { ok, expected: expectedAxis };
+  }
+
+  if ('maxMinValue' in payload) {
+    const vertex = getVertex(a, b, c);
+    const ok = approximatelyEqual(payload.maxMinValue, vertex.y);
+    results.maxMinValue = { ok, expected: vertex.y };
   }
 
   const okAll = Object.values(results).every(x => x.ok);

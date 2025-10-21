@@ -131,11 +131,15 @@ export function tickSession(code) {
       
       // Si se agota el tiempo, pasar a la siguiente misión
       if (s.totalTimeRemaining <= 0) {
+        console.log(`⏰ Tiempo agotado para misión ${s.currentMission}`);
+        console.log(`📊 Estado antes de avanzar: currentMission=${s.currentMission}, totalTimeRemaining=${s.totalTimeRemaining}`);
         advanceToNextMission(s);
+        console.log(`📊 Estado después de avanzar: currentMission=${s.currentMission}, totalTimeRemaining=${s.totalTimeRemaining}`);
       }
     }
     
     bus.emit('session:update', code);
+    console.log(`🔄 Emitido session:update para código ${code}, currentMission=${s.currentMission}`);
   }, interval);
   
   activeTimers.set(code, timer);
@@ -145,6 +149,9 @@ function advanceToNextMission(session) {
   const missionOrder = ['m1', 'm2', 'm3', 'final'];
   const currentIndex = missionOrder.indexOf(session.currentMission);
   
+  console.log(`🔄 Avanzando misión: ${session.currentMission} -> siguiente`);
+  console.log(`📊 Estado actual: currentMission=${session.currentMission}, currentIndex=${currentIndex}`);
+  
   if (currentIndex < missionOrder.length - 1) {
     // Marcar la misión actual como no superada por tiempo agotado
     const currentMissionKey = session.currentMission;
@@ -152,6 +159,9 @@ function advanceToNextMission(session) {
     // Pasar a la siguiente misión
     session.currentMission = missionOrder[currentIndex + 1];
     session.totalTimeRemaining = session.missionTimes[session.currentMission];
+    
+    console.log(`✅ Nueva misión: ${session.currentMission}, tiempo restante: ${session.totalTimeRemaining}`);
+    console.log(`🔍 Verificación: session.currentMission = ${session.currentMission}, missionOrder[${currentIndex + 1}] = ${missionOrder[currentIndex + 1]}`);
     
     // Notificar a todos los equipos sobre el cambio de misión
     session.teams.forEach(teamId => {
