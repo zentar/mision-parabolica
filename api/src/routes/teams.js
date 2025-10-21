@@ -1,0 +1,73 @@
+import { z } from 'zod';
+import { getSession, joinTeam, getTeam, updateTeam } from '../store.js';
+import { validateMission, validateFinal } from '../validators.js';
+
+export default async function teamsRoutes(app) {
+  app.post('/:code/join', async (req, reply) => {
+    try {
+      const { code } = req.params;
+      const schema = z.object({ teamName: z.string().min(1) });
+      const { teamName } = schema.parse(req.body || {});
+      const team = joinTeam(code, teamName);
+      reply.send({ team });
+    } catch (error) {
+      console.error('Error joining team:', error);
+      if (error.message === 'SESSION_NOT_FOUND') {
+        return reply.code(404).send({ error: 'SESSION_NOT_FOUND', message: 'Session not found. Please check the session code.' });
+      }
+      return reply.code(500).send({ error: 'INTERNAL_ERROR', message: 'Failed to join team' });
+    }
+  });
+
+  app.post('/:teamId/submit/:missionKey', async (req, reply) => {
+    const { teamId, missionKey } = req.params;
+    const team = getTeam(teamId);
+    if (!team) return reply.code(404).send({ error: 'TEAM_NOT_FOUND' });
+    const session = getSession(team.code);
+    const mission = session.missions.find(m => m.key === missionKey);
+    if (!mission) return reply.code(400).send({ error: 'MISSION_NOT_FOUND' });
+
+    const result = validateMission(mission.func, req.body || {});
+    team.progress[missionKey].attempts += 1;
+    if (result.ok) {
+      team.progress[missionKey].isCorrect = true;
+      team.score = computeScore(session, team);
+    }
+    updateTeam(team);
+    reply.send({ ok: result.ok, details: result.details, score: team.score });
+  });
+
+  app.post('/:teamId/hint/:missionKey', async (req, reply) => {
+    const { teamId, missionKey } = req.params;
+    const team = getTeam(teamId);
+    if (!team) return reply.code(404).send({ error: 'TEAM_NOT_FOUND' });
+    const session = getSession(team.code);
+    team.progress[missionKey].hints += 1;
+    team.score = computeScore(session, team);
+    updateTeam(team);
+    reply.send({ hints: team.progress[missionKey].hints, score: team.score });
+  });
+
+  app.post('/:teamId/final', async (req, reply) => {
+    const { teamId } = req.params;
+    const team = getTeam(teamId);
+    if (!team) return reply.code(404).send({ error: 'TEAM_NOT_FOUND' });
+    const session = getSession(team.code);
+    const result = validateFinal(session.finalTarget.polynomial, req.body || {});
+    team.progress.final = {
+      equation: req.body?.equation || '',
+      justification: req.body?.justification || '',
+      isCorrect: result.ok,
+      timeSec: team.progress.final.timeSec
+    };
+    team.score = computeScore(session, team);
+    updateTeam(team);
+    reply.send({ ok: result.ok, eqOk: result.eqOk, justificationOk: result.justificationOk, score: team.score });
+  });
+}
+
+function computeScore(session, team) {
+  const base = (team.progress.m1.isCorrect?3:0) + (team.progress.m2.isCorrect?3:0) + (team.progress.m3.isCorrect?3:0) + (team.progress.final.isCorrect?4:0);
+  const penalty = Object.values(team.progress).reduce((acc, p) => acc + (p?.hints||0)*session.rules.hintPenalty, 0);
+  return Math.max(0, base - penalty);
+}
