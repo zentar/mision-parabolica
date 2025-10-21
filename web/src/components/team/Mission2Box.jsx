@@ -10,11 +10,27 @@ const MissionContainer = styled.div`
   gap: 16px;
 `;
 
-const MissionDescription = styled.p`
-  color: #6c757d;
-  font-size: 14px;
-  margin: 0 0 16px 0;
-  line-height: 1.5;
+const MissionDescription = styled.div`
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #495057;
+`;
+
+const FormulaHighlight = styled.span`
+  background: #dc3545;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-block;
+  margin: 8px 0;
+  font-family: 'Courier New', monospace;
 `;
 
 const StatusBadge = styled.div`
@@ -154,7 +170,25 @@ export default function Mission2Box({
   return (
     <MissionContainer>
       <Card title={title} variant="primary">
-        <MissionDescription>{description}</MissionDescription>
+        <MissionDescription>
+          {(() => {
+            // Extraer la fórmula del enunciado
+            const formulaMatch = description.match(/f\(x\)\s*=\s*[^.]*/);
+            if (formulaMatch) {
+              const formula = formulaMatch[0];
+              const beforeFormula = description.substring(0, description.indexOf(formula));
+              const afterFormula = description.substring(description.indexOf(formula) + formula.length);
+              return (
+                <>
+                  {beforeFormula}
+                  <FormulaHighlight>{formula}</FormulaHighlight>
+                  {afterFormula}
+                </>
+              );
+            }
+            return description;
+          })()}
+        </MissionDescription>
         
         <StatusBadge status={status}>
           {status === 'completed' && '✅ Completada'}
