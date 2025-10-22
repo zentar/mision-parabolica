@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 const StyledButton = styled.button`
-  background: ${props => props.variant === 'primary' ? 'linear-gradient(135deg, #A90046 0%, #90046 100%)' : 'linear-gradient(135deg, #303132 0%, #303132 100%)'};
+  background: ${props => props.variant === 'primary' ? 'linear-gradient(135deg, #722F37 0%, #5D1A1A 100%)' : 'linear-gradient(135deg, #303132 0%, #303132 100%)'};
   color: #FFFFFF;
-  border: 2px solid ${props => props.variant === 'primary' ? '#A90046' : '#303132'};
+  border: 2px solid ${props => props.variant === 'primary' ? '#722F37' : '#303132'};
   padding: 12px 24px;
   border-radius: 8px;
   cursor: pointer;
@@ -11,15 +11,15 @@ const StyledButton = styled.button`
   font-size: 14px;
   font-weight: 700;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(48, 49, 50, 0.3);
+  box-shadow: 0 4px 12px rgba(114, 47, 55, 0.4);
   letter-spacing: 0.01em;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   
   &:hover {
-    background: ${props => props.variant === 'primary' ? 'linear-gradient(135deg, #90046 0%, #A90046 100%)' : 'linear-gradient(135deg, #303132 0%, #303132 100%)'};
+    background: ${props => props.variant === 'primary' ? 'linear-gradient(135deg, #5D1A1A 0%, #722F37 100%)' : 'linear-gradient(135deg, #303132 0%, #303132 100%)'};
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(48, 49, 50, 0.4);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 20px rgba(114, 47, 55, 0.6);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
   }
   
   &:active {
