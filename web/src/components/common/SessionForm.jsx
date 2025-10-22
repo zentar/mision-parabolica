@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import Button from './Button';
@@ -52,17 +52,71 @@ const SecondaryButton = styled(Button)`
   }
 `;
 
+const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const SelectLabel = styled.label`
+  font-weight: 500;
+  color: #495057;
+  font-size: 14px;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: #A90046;
+    box-shadow: 0 0 0 3px rgba(169, 0, 70, 0.1);
+  }
+`;
+
+const SelectDescription = styled.small`
+  color: #6c757d;
+  font-size: 12px;
+`;
+
 export default function SessionForm({ onSessionCreated, onTeamJoined }) {
   const [teacherName, setTeacherName] = useState('Profe');
   const [sessionCode, setSessionCode] = useState('');
   const [teamName, setTeamName] = useState('Equipo 1');
   const [isCreating, setIsCreating] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
+  const [equationSets, setEquationSets] = useState([]);
+  const [selectedEquationSet, setSelectedEquationSet] = useState('basic');
+
+  // Cargar conjuntos de ecuaciones disponibles
+  useEffect(() => {
+    const loadEquationSets = async () => {
+      try {
+        const response = await fetch('/sessions/equation-sets');
+        const data = await response.json();
+        setEquationSets(data.sets);
+      } catch (error) {
+        console.error('Error loading equation sets:', error);
+        // Fallback a conjuntos básicos
+        setEquationSets([
+          { key: 'basic', name: 'Básico', description: 'Ecuaciones simples para principiantes' },
+          { key: 'intermediate', name: 'Intermedio', description: 'Ecuaciones de dificultad media' },
+          { key: 'advanced', name: 'Avanzado', description: 'Ecuaciones complejas para estudiantes avanzados' }
+        ]);
+      }
+    };
+    loadEquationSets();
+  }, []);
 
   const handleCreateSession = async () => {
     setIsCreating(true);
     try {
-      const result = await createSession(teacherName);
+      const result = await createSession(teacherName, { equationSet: selectedEquationSet });
       onSessionCreated?.(result);
     } catch (error) {
       console.error('Error creating session:', error);
@@ -106,6 +160,23 @@ export default function SessionForm({ onSessionCreated, onTeamJoined }) {
           onChange={(e) => setTeacherName(e.target.value)}
           placeholder="Ingresa tu nombre"
         />
+        
+        <SelectContainer>
+          <SelectLabel>Nivel de Dificultad</SelectLabel>
+          <Select
+            value={selectedEquationSet}
+            onChange={(e) => setSelectedEquationSet(e.target.value)}
+          >
+            {equationSets.map(set => (
+              <option key={set.key} value={set.key}>
+                {set.name}
+              </option>
+            ))}
+          </Select>
+          <SelectDescription>
+            {equationSets.find(s => s.key === selectedEquationSet)?.description}
+          </SelectDescription>
+        </SelectContainer>
         
         <ButtonGroup>
           <PrimaryButton 

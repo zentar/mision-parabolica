@@ -100,7 +100,7 @@ const ErrorMessage = styled.div`
   box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
 `;
 
-export default function FinalPhase({ teamId, teamProgress }) {
+export default function FinalPhase({ teamId, teamProgress, sessionData }) {
   const [equation, setEquation] = useState('');
   const [justification, setJustification] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -150,34 +150,34 @@ export default function FinalPhase({ teamId, teamProgress }) {
           }}>
             <h4 style={{ margin: '0 0 12px 0', color: '#0c5460' }}>💡 Pistas Obtenidas:</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {teamProgress?.m1?.isCorrect && (
+              {teamProgress?.m1?.isCorrect && sessionData?.missions?.find(m => m.key === 'm1')?.hints && (
                 <div style={{ 
                   background: 'white', 
                   padding: '8px 12px', 
                   borderRadius: '6px',
                   border: '1px solid #bee5eb'
                 }}>
-                  <strong>🔍 Pista 1 (Misión 1):</strong> El coeficiente principal es 1. El término cuadrático es x².
+                  <strong>🔍 Pista 1 (Misión 1):</strong> {sessionData.missions.find(m => m.key === 'm1').hints[0]}
                 </div>
               )}
-              {teamProgress?.m2?.isCorrect && (
+              {teamProgress?.m2?.isCorrect && sessionData?.missions?.find(m => m.key === 'm2')?.hints && (
                 <div style={{ 
                   background: 'white', 
                   padding: '8px 12px', 
                   borderRadius: '6px',
                   border: '1px solid #bee5eb'
                 }}>
-                  <strong>📍 Pista 2 (Misión 2):</strong> El número que acompaña a x es negativo; si duplicas la raíz secreta la obtienes.
+                  <strong>📍 Pista 2 (Misión 2):</strong> {sessionData.missions.find(m => m.key === 'm2').hints[0]}
                 </div>
               )}
-              {teamProgress?.m3?.isCorrect && (
+              {teamProgress?.m3?.isCorrect && sessionData?.missions?.find(m => m.key === 'm3')?.hints && (
                 <div style={{ 
                   background: 'white', 
                   padding: '8px 12px', 
                   borderRadius: '6px',
                   border: '1px solid #bee5eb'
                 }}>
-                  <strong>🎯 Pista 3 (Misión 3):</strong> El término independiente es el cuadrado de la raíz secreta.
+                  <strong>🎯 Pista 3 (Misión 3):</strong> {sessionData.missions.find(m => m.key === 'm3').hints[0]}
                 </div>
               )}
             </div>

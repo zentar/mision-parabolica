@@ -58,12 +58,12 @@ let listeners = []
 export function subscribe(fn){ listeners.push(fn) }
 export function render(){ for(const fn of listeners) fn() }
 
-export async function createSession(teacherName){
+export async function createSession(teacherName, params = {}){
   try {
     const res = await fetch(`${API}/sessions`, { 
       method:'POST', 
       headers:{'Content-Type':'application/json'}, 
-      body: JSON.stringify({ teacherName }) 
+      body: JSON.stringify({ teacherName, ...params }) 
     })
     
     if (!res.ok) {

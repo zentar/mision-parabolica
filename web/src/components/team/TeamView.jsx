@@ -329,10 +329,10 @@ export default function TeamView({ session, team }) {
         {session.currentMission === 'm1' && (
           <MissionWrapper>
             <MissionBox 
-              title="Misión 1: Detectives de la Parábola" 
+              title={session.missions?.find(m => m.key === 'm1')?.name || "Misión 1: Detectives de la Parábola"}
               missionKey="m1"
               teamId={team.id}
-              description="Analiza la parábola f(x) = -x² + 4x - 3. Determina los puntos clave de su gráfica y comportamiento."
+              description={session.missions?.find(m => m.key === 'm1')?.description || "Analiza la parábola f(x) = -x² + 4x - 3. Determina los puntos clave de su gráfica y comportamiento."}
               status={getMissionStatus('m1')}
             />
           </MissionWrapper>
@@ -341,10 +341,10 @@ export default function TeamView({ session, team }) {
         {session.currentMission === 'm2' && (
           <MissionWrapper>
             <Mission2Box 
-              title="Misión 2: Detectores de Forma" 
+              title={session.missions?.find(m => m.key === 'm2')?.name || "Misión 2: Detectores de Forma"}
               missionKey="m2"
               teamId={team.id}
-              description="Estudia la parábola f(x) = x² - 6x + 8. Determina su forma factorizada y forma canónica (vértice)."
+              description={session.missions?.find(m => m.key === 'm2')?.description || "Estudia la parábola f(x) = x² - 6x + 8. Determina su forma factorizada y forma canónica (vértice)."}
               status={getMissionStatus('m2')}
             />
           </MissionWrapper>
@@ -353,10 +353,10 @@ export default function TeamView({ session, team }) {
         {session.currentMission === 'm3' && (
           <MissionWrapper>
             <Mission3Box 
-              title="Misión 3: Grafiquen la Salvación" 
+              title={session.missions?.find(m => m.key === 'm3')?.name || "Misión 3: Grafiquen la Salvación"}
               missionKey="m3"
               teamId={team.id}
-              description="Analiza la parábola f(x) = 2x² - 8x + 6. Determina los puntos clave de su gráfica y comportamiento."
+              description={session.missions?.find(m => m.key === 'm3')?.description || "Analiza la parábola f(x) = 2x² - 8x + 6. Determina los puntos clave de su gráfica y comportamiento."}
               status={getMissionStatus('m3')}
             />
           </MissionWrapper>
@@ -364,7 +364,7 @@ export default function TeamView({ session, team }) {
         
         {session.currentMission === 'final' && (
           <MissionWrapper>
-            <FinalPhase teamId={team.id} teamProgress={team.progress} />
+            <FinalPhase teamId={team.id} teamProgress={team.progress} sessionData={session} />
           </MissionWrapper>
         )}
       </MissionsContainer>
