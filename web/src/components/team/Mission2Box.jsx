@@ -43,17 +43,24 @@ const StatusBadge = styled.div`
   font-weight: 600;
   margin-bottom: 16px;
   background: ${props => {
-    if (props.status === 'completed') return '#d4edda';
-    if (props.status === 'available') return '#d1ecf1';
-    if (props.status === 'time_expired') return '#fff3cd';
-    return '#f8d7da';
+    if (props.status === 'completed') return 'linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%)';
+    if (props.status === 'available') return 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)';
+    if (props.status === 'time_expired') return 'linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%)';
+    return 'linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%)';
   }};
   color: ${props => {
-    if (props.status === 'completed') return '#155724';
-    if (props.status === 'available') return '#0c5460';
-    if (props.status === 'time_expired') return '#856404';
-    return '#721c24';
+    if (props.status === 'completed') return '#1B5E20';
+    if (props.status === 'available') return '#0D47A1';
+    if (props.status === 'time_expired') return '#E65100';
+    return '#B71C1C';
   }};
+  border: 2px solid ${props => {
+    if (props.status === 'completed') return '#4CAF50';
+    if (props.status === 'available') return '#2196F3';
+    if (props.status === 'time_expired') return '#FF9800';
+    return '#F44336';
+  }};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const FormGrid = styled.div`
@@ -104,27 +111,31 @@ const ButtonGroup = styled.div`
 
 
 const SuccessMessage = styled.div`
-  background: #d4edda;
-  color: #155724;
+  background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+  color: #1B5E20;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
   font-weight: 600;
+  border: 2px solid #4CAF50;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
 `;
 
 const ErrorMessage = styled.div`
-  background: #f8d7da;
-  color: #721c24;
+  background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+  color: #B71C1C;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
   font-weight: 600;
+  border: 2px solid #F44336;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
 `;
 
 export default function Mission2Box({ 
@@ -199,7 +210,7 @@ export default function Mission2Box({
 
         {lastResult && lastResult.ok && (
           <SuccessMessage>
-            ✅ ¡Misión completada correctamente! +3 puntos
+            ✅ ¡Misión completada correctamente! +{lastResult.pointsEarned || 0} puntos
           </SuccessMessage>
         )}
 
@@ -217,7 +228,7 @@ export default function Mission2Box({
               type="text"
               value={formData.factoredForm}
               onChange={(e) => updateFormData('factoredForm', e.target.value)}
-              placeholder="Ej: (x-2)(x-4)"
+              placeholder="Ej: (x-1)(x-5)"
               disabled={status === 'time_expired'}
             />
             <small style={{ color: '#6c757d', fontSize: '12px' }}>
@@ -231,7 +242,7 @@ export default function Mission2Box({
               type="text"
               value={formData.canonicalForm}
               onChange={(e) => updateFormData('canonicalForm', e.target.value)}
-              placeholder="Ej: (x-3)^2-1"
+              placeholder="Ej: (x-2)^2+3"
               disabled={status === 'time_expired'}
             />
             <small style={{ color: '#6c757d', fontSize: '12px' }}>

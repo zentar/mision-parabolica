@@ -30,8 +30,15 @@ export function connectSocket(code) {
         
         if (JSON.stringify(sessionData) !== JSON.stringify(state.session)) {
           console.log('🔄 Session updated:', sessionData);
-          console.log('🎯 Current mission:', sessionData.currentMission);
-          console.log('⏰ Time remaining:', sessionData.totalTimeRemaining);
+          
+          // Actualizar el equipo si existe
+          if (state.team && sessionData.teams) {
+            const updatedTeam = sessionData.teams.find(t => t.id === state.team.id);
+            if (updatedTeam) {
+              state.team = updatedTeam;
+            }
+          }
+          
           state.session = sessionData;
           render();
         }
@@ -103,7 +110,7 @@ export async function askHint(teamId, missionKey){
 
 export async function submitFinal(teamId, payload){
   const res = await fetch(`${API}/teams/${teamId}/final`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
-  return res.json()
+  return res.json();
 }
 
 export async function startSession(code){

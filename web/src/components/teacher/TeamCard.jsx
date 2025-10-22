@@ -16,13 +16,14 @@ const TeamName = styled.h4`
 `;
 
 const TeamScore = styled.div`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8B1538 0%, #A90046 100%);
   color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 10px 18px;
+  border-radius: 25px;
   font-weight: 600;
   font-size: 14px;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(139, 21, 56, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const ProgressList = styled.ul`
@@ -149,7 +150,28 @@ export default function TeamCard({ team }) {
   };
 
   const completedMissions = Object.values(progress).filter(p => p.isCorrect).length;
-  const totalHints = Object.values(progress).reduce((sum, p) => sum + (p.hints || 0), 0);
+  
+  // Calcular tiempo total empleado
+  const calculateTotalTime = () => {
+    const totalTime = Object.values(progress).reduce((total, mission) => {
+      if (mission.timeUsed) {
+        return total + mission.timeUsed;
+      }
+      return total;
+    }, 0);
+    return totalTime;
+  };
+  
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    if (minutes > 0) {
+      return `${minutes}m ${remainingSeconds}s`;
+    }
+    return `${remainingSeconds}s`;
+  };
+  
+  const totalTimeUsed = calculateTotalTime();
 
   return (
     <Card>
@@ -182,6 +204,9 @@ export default function TeamCard({ team }) {
             {progress.m1.hints > 0 && (
               <HintsCount>{progress.m1.hints} pistas</HintsCount>
             )}
+            {progress.m1.timeUsed && (
+              <HintsCount>⏱️ {formatTime(progress.m1.timeUsed)}</HintsCount>
+            )}
           </MissionStatus>
         </ProgressItem>
         
@@ -207,6 +232,9 @@ export default function TeamCard({ team }) {
             </StatusText>
             {progress.m2.hints > 0 && (
               <HintsCount>{progress.m2.hints} pistas</HintsCount>
+            )}
+            {progress.m2.timeUsed && (
+              <HintsCount>⏱️ {formatTime(progress.m2.timeUsed)}</HintsCount>
             )}
           </MissionStatus>
         </ProgressItem>
@@ -234,6 +262,9 @@ export default function TeamCard({ team }) {
             {progress.m3.hints > 0 && (
               <HintsCount>{progress.m3.hints} pistas</HintsCount>
             )}
+            {progress.m3.timeUsed && (
+              <HintsCount>⏱️ {formatTime(progress.m3.timeUsed)}</HintsCount>
+            )}
           </MissionStatus>
         </ProgressItem>
         
@@ -257,6 +288,9 @@ export default function TeamCard({ team }) {
             >
               {getStatusText(progress.final)}
             </StatusText>
+            {progress.final.timeUsed && (
+              <HintsCount>⏱️ {formatTime(progress.final.timeUsed)}</HintsCount>
+            )}
           </MissionStatus>
         </ProgressItem>
       </ProgressList>
@@ -267,8 +301,8 @@ export default function TeamCard({ team }) {
           <StatLabel>Misiones</StatLabel>
         </StatItem>
         <StatItem>
-          <StatValue>{totalHints}</StatValue>
-          <StatLabel>Pistas</StatLabel>
+          <StatValue>{formatTime(totalTimeUsed)}</StatValue>
+          <StatLabel>Tiempo Total</StatLabel>
         </StatItem>
         <StatItem>
           <StatValue>{team.score}</StatValue>

@@ -4,6 +4,9 @@ import { state, subscribe } from './state/store';
 import SessionForm from './components/common/SessionForm';
 import TeacherView from './components/teacher/TeacherView';
 import TeamView from './components/team/TeamView';
+import Logo from './components/common/Logo';
+import UniversityLogo from './components/common/UniversityLogo';
+import Footer from './components/common/Footer';
 import { NotificationProvider, useNotification } from './components/common/Notification';
 
 // Global styles
@@ -42,23 +45,11 @@ const Header = styled.header`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 `;
 
-const Title = styled.h1`
-  color: #F2F2F2;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 3rem;
-  font-weight: 800;
-  margin: 0;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-  letter-spacing: -0.02em;
-`;
-
-const Subtitle = styled.p`
-  color: #EDECE3;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.2rem;
-  margin: 12px 0 0 0;
-  font-weight: 300;
-  letter-spacing: 0.01em;
+const HeaderContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 `;
 
 const MainContent = styled.main`
@@ -93,8 +84,10 @@ function AppContent() {
     <AppContainer>
       <GlobalStyle />
       <Header>
-        <Title>🚀 Misión Parabólica</Title>
-        <Subtitle>Explora las propiedades de las parábolas en una aventura matemática</Subtitle>
+        <HeaderContent>
+          <UniversityLogo />
+          <Logo />
+        </HeaderContent>
       </Header>
       
       <MainContent>
@@ -108,6 +101,8 @@ function AppContent() {
         {s.session && s.role === 'teacher' && <TeacherView session={s.session} />}
         {s.session && s.role === 'team' && <TeamView session={s.session} team={s.team} />}
       </MainContent>
+      
+      <Footer />
     </AppContainer>
   );
 }

@@ -30,13 +30,13 @@ const Title = styled.h2`
 `;
 
 const ScoreDisplay = styled.div`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #A90046 0%, #8B0038 100%);
   color: white;
   padding: 12px 20px;
   border-radius: 12px;
   font-weight: 600;
   font-size: 18px;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(169, 0, 70, 0.3);
 `;
 
 const MissionsContainer = styled.div`
@@ -167,6 +167,7 @@ export default function TeamView({ session, team }) {
     final: false
   });
   const [showUnlockNotification, setShowUnlockNotification] = useState(null);
+
   
   // Determinar qué misiones están disponibles
   const isMission1Available = session.currentMission === 'm1' || session.currentMission === 'm2' || session.currentMission === 'm3' || session.currentMission === 'final';
@@ -327,7 +328,7 @@ export default function TeamView({ session, team }) {
         {/* Mostrar solo la misión actual según session.currentMission */}
         {session.currentMission === 'm1' && (
           <MissionWrapper>
-            <Mission3Box 
+            <MissionBox 
               title="Misión 1: Detectives de la Parábola" 
               missionKey="m1"
               teamId={team.id}

@@ -8,13 +8,14 @@ const pulse = keyframes`
 `;
 
 const TimerContainer = styled.div`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8B1538 0%, #A90046 100%);
   color: white;
-  padding: 20px;
-  border-radius: 16px;
+  padding: 24px;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 12px 40px rgba(139, 21, 56, 0.25);
   margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   animation: ${props => props.urgent ? pulse : 'none'} 1s infinite;
 `;
 

@@ -127,32 +127,37 @@ const SessionInfo = styled.div`
 `;
 
 const CopyButton = styled.button`
-  background: #007bff;
+  background: linear-gradient(135deg, #1976D2 0%, #0D47A1 100%);
   color: white;
-  border: none;
+  border: 2px solid #1976D2;
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
   
   &:hover {
-    background: #0056b3;
+    background: linear-gradient(135deg, #0D47A1 0%, #1976D2 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
   }
   
   &:active {
-    transform: translateY(1px);
+    transform: translateY(0);
   }
 `;
 
 const TeamsCount = styled.div`
-  background: #28a745;
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
   font-weight: 600;
   font-size: 14px;
+  border: 2px solid #2E7D32;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
 `;
 
 const SessionControls = styled.div`
@@ -162,57 +167,76 @@ const SessionControls = styled.div`
 `;
 
 const StartButton = styled.button`
-  background: #28a745;
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
   color: white;
-  border: none;
+  border: 2px solid #2E7D32;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
   
   &:hover {
-    background: #218838;
+    background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4);
   }
   
   &:disabled {
-    background: #6c757d;
+    background: linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%);
+    border-color: #BDBDBD;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 `;
 
 const FinishButton = styled.button`
-  background: #dc3545;
+  background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
   color: white;
-  border: none;
+  border: 2px solid #D32F2F;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
   
   &:hover {
-    background: #c82333;
+    background: linear-gradient(135deg, #B71C1C 0%, #D32F2F 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(211, 47, 47, 0.4);
   }
   
   &:disabled {
-    background: #6c757d;
+    background: linear-gradient(135deg, #BDBDBD 0%, #9E9E9E 100%);
+    border-color: #BDBDBD;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 `;
 
 const SessionStatus = styled.div`
   background: ${props => {
-    if (props.status === 'waiting') return '#ffc107';
-    if (props.status === 'active') return '#28a745';
-    if (props.status === 'finished') return '#6c757d';
-    return '#6c757d';
+    if (props.status === 'waiting') return 'linear-gradient(135deg, #F57C00 0%, #E65100 100%)';
+    if (props.status === 'active') return 'linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)';
+    if (props.status === 'finished') return 'linear-gradient(135deg, #616161 0%, #424242 100%)';
+    return 'linear-gradient(135deg, #616161 0%, #424242 100%)';
   }};
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
   font-weight: 600;
   font-size: 14px;
+  border: 2px solid ${props => {
+    if (props.status === 'waiting') return '#F57C00';
+    if (props.status === 'active') return '#2E7D32';
+    if (props.status === 'finished') return '#616161';
+    return '#616161';
+  }};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 `;
 
 export default function TeacherView({ session }) {

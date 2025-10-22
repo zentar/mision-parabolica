@@ -62,17 +62,49 @@ const ButtonContainer = styled.div`
 `;
 
 const SubmitButton = styled(Button)`
-  background: #28a745;
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+  border-color: #2E7D32;
   
   &:hover {
-    background: #218838;
+    background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(46, 125, 50, 0.4);
   }
+`;
+
+const SuccessMessage = styled.div`
+  background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+  color: #1B5E20;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  border: 2px solid #4CAF50;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+`;
+
+const ErrorMessage = styled.div`
+  background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+  color: #B71C1C;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  border: 2px solid #F44336;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
 `;
 
 export default function FinalPhase({ teamId, teamProgress }) {
   const [equation, setEquation] = useState('');
   const [justification, setJustification] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lastResult, setLastResult] = useState(null);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -81,9 +113,11 @@ export default function FinalPhase({ teamId, teamProgress }) {
         equation, 
         justification 
       });
-      console.log('Final submission result:', result);
+      
+      setLastResult(result);
     } catch (error) {
       console.error('Error submitting final:', error);
+      setLastResult({ ok: false, error: 'Error al enviar la respuesta' });
     } finally {
       setIsSubmitting(false);
     }
@@ -188,14 +222,14 @@ export default function FinalPhase({ teamId, teamProgress }) {
           </FormGroup>
           
           <FormGroup>
-            <Label>Justificación Matemática</Label>
+            <Label>Justificación Matemática (Opcional)</Label>
             <StyledTextarea
               value={justification}
               onChange={(e) => setJustification(e.target.value)}
-              placeholder="Explica cómo usaste las pistas para llegar a la respuesta..."
+              placeholder="Explica cómo usaste las pistas para llegar a la respuesta... (opcional)"
             />
             <small style={{ color: '#6c757d', fontSize: '12px' }}>
-              Describe tu proceso de razonamiento usando las pistas obtenidas
+              Describe tu proceso de razonamiento usando las pistas obtenidas (opcional)
             </small>
           </FormGroup>
         </div>
@@ -203,10 +237,15 @@ export default function FinalPhase({ teamId, teamProgress }) {
         <ButtonContainer>
           <SubmitButton 
             onClick={handleSubmit}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !equation.trim()}
           >
             {isSubmitting ? 'Enviando...' : '🚀 Enviar Respuesta Final'}
           </SubmitButton>
+          {!equation.trim() && (
+            <small style={{ color: '#dc3545', fontSize: '12px', marginTop: '8px' }}>
+              Ingresa una ecuación para continuar
+            </small>
+          )}
         </ButtonContainer>
       </FinalContainer>
     </Card>
