@@ -1,13 +1,28 @@
 import { z } from 'zod';
 import { createSession, getSessionState, tickSession, startSession, finishSession, updateSessionTimers } from '../store.js';
+import { equationSets } from '../mission-configs.js';
 
 export default async function sessionsRoutes(app) {
+  // Endpoint para obtener los conjuntos de ecuaciones disponibles
+  app.get('/equation-sets', async (req, reply) => {
+    const sets = Object.keys(equationSets).map(key => ({
+      key,
+      name: key === 'basic' ? 'Básico' : key === 'intermediate' ? 'Intermedio' : 'Avanzado',
+      description: key === 'basic' ? 'Ecuaciones simples para principiantes' : 
+                   key === 'intermediate' ? 'Ecuaciones de dificultad media' : 
+                   'Ecuaciones complejas para estudiantes avanzados',
+      missions: equationSets[key].length
+    }));
+    reply.send({ sets });
+  });
+
   app.post('/', async (req, reply) => {
     const schema = z.object({
       teacherName: z.string().min(1),
       timers: z.object({ m1:z.number().int().positive(), m2:z.number().int().positive(), m3:z.number().int().positive(), final:z.number().int().positive() }).partial().optional(),
       allowPartial: z.boolean().optional(),
-      hintPenalty: z.number().int().nonnegative().optional()
+      hintPenalty: z.number().int().nonnegative().optional(),
+      equationSet: z.enum(['basic', 'intermediate', 'advanced']).optional()
     });
     const body = schema.parse(req.body || {});
     const session = createSession(body.teacherName, body);

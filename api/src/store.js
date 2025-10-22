@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { customAlphabet } from 'nanoid';
-import { seedMissions, finalTarget } from './tasks.js';
+import { seedMissions, getFinalTargetForSet } from './tasks.js';
 
 export const bus = new EventEmitter();
 const nano = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', Number(process.env.SESSION_CODE_LENGTH || 6));
@@ -18,6 +18,10 @@ export function createSession(teacherName, params = {}) {
   const defaultTimers = { m1: 600, m2: 600, m3: 600, final: 480 };
   const timers = params.timers || defaultTimers;
   
+  // Obtener el conjunto de ecuaciones (por defecto 'basic')
+  const equationSet = params.equationSet || 'basic';
+  console.log('🔧 Creating session with equationSet:', equationSet, 'params:', params);
+  
   const session = {
     code,
     teacherName,
@@ -34,8 +38,8 @@ export function createSession(teacherName, params = {}) {
       allowPartial: params.allowPartial ?? (process.env.ALLOW_PARTIAL === 'true'),
       hintPenalty: Number(process.env.HINT_PENALTY || 1)
     },
-    missions: seedMissions(),
-    finalTarget,
+    missions: seedMissions(equationSet),
+    finalTarget: getFinalTargetForSet(equationSet),
     teams: [],
     events: []
   };
@@ -100,8 +104,14 @@ export function getSessionState(code) {
     // Mantener compatibilidad
     timers: s.timers || { m1: 600, m2: 600, m3: 600, final: 480 },
     rules: s.rules, 
-    missions: s.missions.map(m => ({ key: m.key, name: m.name })), 
-    finalTarget: s.finalTarget.public, 
+    missions: s.missions.map(m => ({ 
+      key: m.key, 
+      name: m.name, 
+      func: m.func, 
+      description: m.description,
+      hints: m.hints || []
+    })), 
+    finalTarget: s.finalTarget, 
     teams, 
     scoreboard 
   };

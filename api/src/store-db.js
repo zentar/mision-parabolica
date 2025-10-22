@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { customAlphabet } from 'nanoid';
-import { seedMissions, finalTarget } from './tasks.js';
+import { seedMissions, getFinalTargetForSet } from './tasks.js';
 import { db, sessionQueries, teamQueries, eventQueries } from './database/index.js';
 
 export const bus = new EventEmitter();
@@ -14,6 +14,10 @@ export function createSession(teacherName, params = {}) {
   const code = newCode();
   const now = Date.now();
   
+  // Obtener el conjunto de ecuaciones (por defecto 'basic')
+  const equationSet = params.equationSet || 'basic';
+  console.log('🔧 Creating session with equationSet:', equationSet, 'params:', params);
+  
   const session = {
     code,
     teacherName,
@@ -24,8 +28,8 @@ export function createSession(teacherName, params = {}) {
       allowPartial: params.allowPartial ?? (process.env.ALLOW_PARTIAL === 'true'),
       hintPenalty: Number(process.env.HINT_PENALTY || 1)
     },
-    missions: seedMissions(),
-    finalTarget,
+    missions: seedMissions(equationSet),
+    finalTarget: getFinalTargetForSet(equationSet),
     teams: [],
     events: []
   };
