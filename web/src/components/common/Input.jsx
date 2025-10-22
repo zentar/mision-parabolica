@@ -2,43 +2,62 @@ import styled from 'styled-components';
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: 8px 12px;
-  border: 2px solid #e9ecef;
-  border-radius: 6px;
+  padding: 12px 16px;
+  border: 2px solid #EDECE3;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  transition: border-color 0.2s ease;
+  font-weight: 400;
+  background: #F2F2F2;
+  color: #303132;
+  transition: all 0.3s ease;
   
   &:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    border-color: #A90046;
+    box-shadow: 0 0 0 4px rgba(169, 0, 70, 0.15);
+    background: #F2F2F2;
   }
   
   &:invalid {
-    border-color: #dc3545;
+    border-color: #A90046;
+    box-shadow: 0 0 0 4px rgba(169, 0, 70, 0.15);
   }
   
   &::placeholder {
-    color: #6c757d;
+    color: #303132;
+    opacity: 0.6;
+    font-weight: 300;
+  }
+  
+  &:disabled {
+    background: #EDECE3;
+    color: #303132;
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 `;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 `;
 
 const Label = styled.label`
-  font-weight: 500;
-  color: #495057;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #303132;
   font-size: 14px;
+  letter-spacing: 0.01em;
 `;
 
 const ErrorMessage = styled.span`
-  color: #dc3545;
+  color: #A90046;
+  font-family: 'Poppins', sans-serif;
   font-size: 12px;
-  margin-top: 2px;
+  font-weight: 500;
+  margin-top: 4px;
 `;
 
 export default function Input({ 

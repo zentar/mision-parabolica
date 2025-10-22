@@ -34,39 +34,25 @@ const NotificationContainer = styled.div`
 `;
 
 const StyledNotification = styled.div`
-  background: ${props => {
+  background: linear-gradient(135deg, #F2F2F2 0%, #EDECE3 100%);
+  color: #303132;
+  border: 2px solid ${props => {
     switch (props.type) {
-      case 'success': return '#d4edda';
-      case 'error': return '#f8d7da';
-      case 'warning': return '#fff3cd';
-      case 'info': return '#d1ecf1';
-      default: return '#f8f9fa';
+      case 'success': return '#A90046';
+      case 'error': return '#A90046';
+      case 'warning': return '#90046';
+      case 'info': return '#303132';
+      default: return '#EDECE3';
     }
   }};
-  color: ${props => {
-    switch (props.type) {
-      case 'success': return '#155724';
-      case 'error': return '#721c24';
-      case 'warning': return '#856404';
-      case 'info': return '#0c5460';
-      default: return '#495057';
-    }
-  }};
-  border: 1px solid ${props => {
-    switch (props.type) {
-      case 'success': return '#c3e6cb';
-      case 'error': return '#f5c6cb';
-      case 'warning': return '#ffeaa7';
-      case 'info': return '#bee5eb';
-      default: return '#e9ecef';
-    }
-  }};
-  border-radius: 6px;
-  padding: 12px 16px;
+  border-radius: 12px;
+  padding: 16px 20px;
   min-width: 300px;
   max-width: 400px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(48, 49, 50, 0.2);
   animation: ${props => props.isVisible ? slideIn : slideOut} 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
 `;
 
 const NotificationHeader = styled.div`

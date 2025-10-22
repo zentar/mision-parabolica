@@ -1,30 +1,35 @@
 import styled from 'styled-components';
 
 const StyledCard = styled.div`
-  background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s ease;
+  background: #F2F2F2;
+  border: 2px solid #EDECE3;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(48, 49, 50, 0.15);
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
   
   &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 32px rgba(48, 49, 50, 0.25);
+    transform: translateY(-2px);
   }
   
   ${props => props.variant === 'success' && `
-    border-color: #28a745;
-    background: #f8fff9;
+    border-color: #A90046;
+    background: linear-gradient(135deg, #F2F2F2 0%, #EDECE3 100%);
+    box-shadow: 0 8px 24px rgba(169, 0, 70, 0.2);
   `}
   
   ${props => props.variant === 'warning' && `
-    border-color: #ffc107;
-    background: #fffdf7;
+    border-color: #90046;
+    background: linear-gradient(135deg, #F2F2F2 0%, #EDECE3 100%);
+    box-shadow: 0 8px 24px rgba(144, 0, 70, 0.2);
   `}
   
   ${props => props.variant === 'danger' && `
-    border-color: #dc3545;
-    background: #fff8f8;
+    border-color: #A90046;
+    background: linear-gradient(135deg, #F2F2F2 0%, #EDECE3 100%);
+    box-shadow: 0 8px 24px rgba(169, 0, 70, 0.2);
   `}
 `;
 
@@ -32,21 +37,25 @@ const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #EDECE3;
 `;
 
 const CardTitle = styled.h3`
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #495057;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #303132;
+  letter-spacing: -0.01em;
 `;
 
 const CardBody = styled.div`
-  color: #6c757d;
-  line-height: 1.5;
+  color: #303132;
+  line-height: 1.6;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
 `;
 
 export default function Card({ 

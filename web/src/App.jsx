@@ -8,6 +8,8 @@ import { NotificationProvider, useNotification } from './components/common/Notif
 
 // Global styles
 const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+  
   * {
     margin: 0;
     padding: 0;
@@ -15,46 +17,52 @@ const GlobalStyle = createGlobalStyle`
   }
   
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    font-family: 'Montserrat', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #A90046 0%, #90046 50%, #303132 100%);
     min-height: 100vh;
+    color: #303132;
   }
 `;
 
 const AppContainer = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #A90046 0%, #90046 50%, #303132 100%);
 `;
 
 const Header = styled.header`
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  padding: 20px 0;
+  background: rgba(48, 49, 50, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 30px 0;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 3px solid #A90046;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 `;
 
 const Title = styled.h1`
-  color: white;
-  font-size: 2.5rem;
-  font-weight: 700;
+  color: #F2F2F2;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
   margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  letter-spacing: -0.02em;
 `;
 
 const Subtitle = styled.p`
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1.1rem;
-  margin: 8px 0 0 0;
+  color: #EDECE3;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  margin: 12px 0 0 0;
   font-weight: 300;
+  letter-spacing: 0.01em;
 `;
 
 const MainContent = styled.main`
-  padding: 40px 20px;
+  padding: 50px 20px;
   max-width: 1200px;
   margin: 0 auto;
 `;
