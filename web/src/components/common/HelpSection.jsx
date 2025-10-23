@@ -13,18 +13,18 @@ const HelpHeader = styled.div`
 `;
 
 const HelpTitle = styled.h2`
-  color: #F2F2F2;
+  color: #A90046;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 16px;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const HelpSubtitle = styled.p`
-  color: #EDECE3;
+  color: #495057;
   font-size: 1.2rem;
-  font-weight: 300;
-  opacity: 0.9;
+  font-weight: 400;
+  opacity: 0.8;
 `;
 
 const HelpGrid = styled.div`
@@ -186,27 +186,37 @@ export default function HelpSection() {
         </HelpCard>
       </TwoColumnGrid>
 
-      <HelpCard>
-        <CardTitle>🎯 Niveles de Dificultad</CardTitle>
-        <CardContent>
-          <TwoColumnGrid>
+      <HelpGrid>
+        <HelpCard>
+          <CardTitle>🟢 Nivel Básico</CardTitle>
+          <CardContent>
             <LevelInfo>
-              <LevelTitle>🟢 Básico</LevelTitle>
+              <LevelTitle>Para Principiantes</LevelTitle>
               <LevelDescription>Ecuaciones simples para principiantes. Pistas directas en la fase final.</LevelDescription>
             </LevelInfo>
-            
+          </CardContent>
+        </HelpCard>
+
+        <HelpCard>
+          <CardTitle>🟡 Nivel Intermedio</CardTitle>
+          <CardContent>
             <LevelInfo>
-              <LevelTitle>🟡 Intermedio</LevelTitle>
+              <LevelTitle>Dificultad Media</LevelTitle>
               <LevelDescription>Ecuaciones de dificultad media. Pistas guiadas que requieren reflexión.</LevelDescription>
             </LevelInfo>
-            
+          </CardContent>
+        </HelpCard>
+
+        <HelpCard>
+          <CardTitle>🔴 Nivel Avanzado</CardTitle>
+          <CardContent>
             <LevelInfo>
-              <LevelTitle>🔴 Avanzado</LevelTitle>
+              <LevelTitle>Para Estudiantes Avanzados</LevelTitle>
               <LevelDescription>Ecuaciones complejas para estudiantes avanzados. Pistas desafiantes.</LevelDescription>
             </LevelInfo>
-          </TwoColumnGrid>
-        </CardContent>
-      </HelpCard>
+          </CardContent>
+        </HelpCard>
+      </HelpGrid>
 
       <FeaturesGrid>
         <HelpCard>
