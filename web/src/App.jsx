@@ -7,6 +7,7 @@ import TeamView from './components/team/TeamView';
 import Logo from './components/common/Logo';
 import UniversityLogo from './components/common/UniversityLogo';
 import Footer from './components/common/Footer';
+import HelpSection from './components/common/HelpSection';
 import { NotificationProvider, useNotification } from './components/common/Notification';
 
 // Global styles
@@ -92,10 +93,13 @@ function AppContent() {
       
       <MainContent>
         {!s.session && (
-          <SessionForm 
-            onSessionCreated={handleSessionCreated}
-            onTeamJoined={handleTeamJoined}
-          />
+          <>
+            <SessionForm 
+              onSessionCreated={handleSessionCreated}
+              onTeamJoined={handleTeamJoined}
+            />
+            <HelpSection />
+          </>
         )}
 
         {s.session && s.role === 'teacher' && <TeacherView session={s.session} />}
