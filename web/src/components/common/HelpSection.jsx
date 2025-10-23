@@ -248,7 +248,7 @@ export default function HelpSection() {
 
       {isExpanded && (
         <ExpandedContent>
-          <HelpGrid>
+          <TwoColumnGrid>
             <HelpCard>
               <CardTitle>🎮 Cómo Jugar</CardTitle>
               <CardContent>
@@ -292,7 +292,7 @@ export default function HelpSection() {
                 <p><strong>Respuesta incorrecta:</strong> Verifica el formato de tu respuesta (decimales, fracciones, etc.)</p>
               </CardContent>
             </HelpCard>
-          </HelpGrid>
+          </TwoColumnGrid>
         </ExpandedContent>
       )}
     </HelpContainer>
