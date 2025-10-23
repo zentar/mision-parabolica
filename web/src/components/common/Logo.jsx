@@ -9,16 +9,6 @@ const LogoContainer = styled.div`
   margin-bottom: 8px;
 `;
 
-const LogoIcon = styled.svg`
-  width: ${props => props.size || '120px'};
-  height: ${props => props.size || '120px'};
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-  transition: transform 0.3s ease;
-  
-  &:hover {
-    transform: scale(1.05);
-  }
-`;
 
 const LogoText = styled.div`
   display: flex;
@@ -51,10 +41,6 @@ const Subtitle = styled.p`
 export default function Logo({ showSubtitle = true, compact = false }) {
   return (
     <LogoContainer>
-      <LogoIcon size={compact ? '80px' : '120px'} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        {/* Logo limpio sin elementos decorativos */}
-      </LogoIcon>
-      
       <LogoText>
         <Title compact={compact}>
           🚀 Misión Parabólica
