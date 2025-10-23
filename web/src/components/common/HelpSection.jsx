@@ -34,6 +34,24 @@ const HelpGrid = styled.div`
   margin-bottom: 30px;
 `;
 
+const TwoColumnGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 30px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const FeaturesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+`;
+
 const HelpCard = styled(Card)`
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
@@ -138,7 +156,7 @@ export default function HelpSection() {
         <HelpSubtitle>Aprende cómo usar Misión Parabólica paso a paso</HelpSubtitle>
       </HelpHeader>
 
-      <HelpGrid>
+      <TwoColumnGrid>
         <HelpCard>
           <CardTitle>👨‍🏫 Para Docentes</CardTitle>
           <CardContent>
@@ -166,10 +184,12 @@ export default function HelpSection() {
             </StepList>
           </CardContent>
         </HelpCard>
+      </TwoColumnGrid>
 
-        <HelpCard>
-          <CardTitle>🎯 Niveles de Dificultad</CardTitle>
-          <CardContent>
+      <HelpCard>
+        <CardTitle>🎯 Niveles de Dificultad</CardTitle>
+        <CardContent>
+          <TwoColumnGrid>
             <LevelInfo>
               <LevelTitle>🟢 Básico</LevelTitle>
               <LevelDescription>Ecuaciones simples para principiantes. Pistas directas en la fase final.</LevelDescription>
@@ -184,23 +204,33 @@ export default function HelpSection() {
               <LevelTitle>🔴 Avanzado</LevelTitle>
               <LevelDescription>Ecuaciones complejas para estudiantes avanzados. Pistas desafiantes.</LevelDescription>
             </LevelInfo>
-          </CardContent>
-        </HelpCard>
+          </TwoColumnGrid>
+        </CardContent>
+      </HelpCard>
 
+      <FeaturesGrid>
         <HelpCard>
-          <CardTitle>⭐ Características</CardTitle>
+          <CardTitle>⭐ Características Principales</CardTitle>
           <CardContent>
             <FeatureList>
               <li>✅ Sistema de puntuación con bonificaciones por tiempo</li>
               <li>✅ Pistas dinámicas según el nivel seleccionado</li>
               <li>✅ Ecuaciones parametrizadas por dificultad</li>
+            </FeatureList>
+          </CardContent>
+        </HelpCard>
+
+        <HelpCard>
+          <CardTitle>🔧 Funcionalidades Técnicas</CardTitle>
+          <CardContent>
+            <FeatureList>
               <li>✅ Monitoreo en tiempo real para docentes</li>
               <li>✅ Interfaz intuitiva y moderna</li>
               <li>✅ Sistema de notificaciones</li>
             </FeatureList>
           </CardContent>
         </HelpCard>
-      </HelpGrid>
+      </FeaturesGrid>
 
       <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
         {isExpanded ? 'Ocultar Detalles' : 'Ver Más Detalles'}
