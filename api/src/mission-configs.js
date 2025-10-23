@@ -231,10 +231,9 @@ export function getFinalTarget(equationSet = 'basic') {
       description: 'La ecuación final que resuelve el misterio (Intermedio)',
       public: { 
         hints: [
-          'Observa que esta ecuación tiene una forma especial.',
-          '¿Puedes identificar qué tipo de expresión es x² - 2x + 1?',
-          'Recuerda que hay expresiones que se pueden escribir como el cuadrado de un binomio.',
-          '¿Qué número al cuadrado da 1, y qué número multiplicado por 2 da 2?'
+          'El término cuadrático sigue siendo x², nada ha cambiado allí.',
+          'El número que acompaña a x es negativo; al duplicar la raíz secreta, aparece.',
+          'El término constante es el cuadrado exacto de la raíz secreta.'
         ]
       }
     },
@@ -244,10 +243,9 @@ export function getFinalTarget(equationSet = 'basic') {
       description: 'La ecuación final que resuelve el misterio (Avanzado)',
       public: { 
         hints: [
-          'Observa que esta ecuación tiene una forma especial.',
-          '¿Puedes identificar qué tipo de expresión es x² - 6x + 9?',
-          'Recuerda que hay expresiones que se pueden escribir como el cuadrado de un binomio.',
-          '¿Qué número al cuadrado da 9, y qué número multiplicado por 2 da 6?'
+          'El coeficiente del término cuadrático es 1, como en los niveles anteriores.',
+          'El número que acompaña a x es negativo; si duplicas la raíz secreta, lo encontrarás.',
+          'El número que no tiene x es el cuadrado de la raíz secreta.'
         ]
       }
     }
