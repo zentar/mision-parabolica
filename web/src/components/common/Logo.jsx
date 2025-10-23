@@ -35,9 +35,7 @@ const Title = styled.h1`
   margin: 0;
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
   letter-spacing: -0.02em;
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  text-align: center;
 `;
 
 const Subtitle = styled.p`
@@ -47,6 +45,7 @@ const Subtitle = styled.p`
   margin: 0;
   font-weight: 300;
   letter-spacing: 0.01em;
+  text-align: center;
 `;
 
 export default function Logo({ showSubtitle = true, compact = false }) {
